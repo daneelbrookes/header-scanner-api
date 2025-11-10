@@ -1,3 +1,5 @@
+from typing import Tuple
+
 """
 
 Good Headers:
@@ -24,63 +26,60 @@ def scan_header(header_name: str):
     return decorator
 
 @scan_header("strict-transport-security")
-def strict_transport_security(val: str) -> int:
-
+def strict_transport_security(val: str) -> Tuple[int, str]:
 
     # No header exists
     if val is None:
-        return -20
+        return (-20, "")
     
     if 'max-age' not in val:
         # Invalid header
-        return -20
+        return (-20, "")
     
     try:
         age = int(val.split('=')[1])
     except ValueError:
         # Invalid header
-        return -20
+        return (-20, "")
     
     if age < 15768000:
-        return -10
+        return (-10, "")
     
-    return 0
+    return (0, "")
 
 @scan_header("x-content-type-options")
-def x_content_type_options(val: str) -> int:
+def x_content_type_options(val: str) -> Tuple[int, str]:
 
     if val is None:
-        return -5
+        return (-5, "")
 
     if val.lower() == 'nosniff':
-        return 0
+        return (0, "")
     
-    return -5
+    return (-5, "")
 
 @scan_header("set-cookie")
-def set_cookie(val: str) -> int:
+def set_cookie(val: str) -> Tuple[int, str]:
 
     if val is None:
-        return 0
+        return (0, "")
 
     cookies = val.split(";")
 
     #if 'Secure' in cookies:
 
-    return 0
+    return (0, "")
 
 @scan_header("x-content-policy")
-def x_content_policy(val: str) -> int:
+def x_content_policy(val: str) -> Tuple[int, str]:
 
-    print(f"Scanning header: {x_content_policy} {val}")
-
-    return 0
+    return (0, "")
 
 @scan_header("referrer-policy")
-def referrer_policy(val: str) -> int:
+def referrer_policy(val: str) -> Tuple[int, str]:
 
     if val is None:
-        return 0
+        return (0, "")
 
     if val in [
         "no-referrer",
@@ -88,7 +87,7 @@ def referrer_policy(val: str) -> int:
         "strict-origin",
         "strict-origin-when-cross-origin"
     ]:
-        return 5
+        return (5, "")
     
     elif val in [
         "origin",
@@ -96,7 +95,7 @@ def referrer_policy(val: str) -> int:
         "unsafe-url",
         "no-referrer-when-downgrade"
     ]:
-        return -5
+        return (-5, "")
     
-    return -5
+    return (-5, "")
     

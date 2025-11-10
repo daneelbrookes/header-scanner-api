@@ -17,6 +17,8 @@ def scan():
     url = data.get('url') if data else None
     if url is None:
         return jsonify({"msg": "A URL must be supplied."})
+    
+    
 
 
     return jsonify({"msg": "Yo"})
