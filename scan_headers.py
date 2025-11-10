@@ -14,7 +14,6 @@ X-Frame-Options
 X-Content-Type-Options
 X-XSS-Protection
 Set-Cookie (Secure, HttpOnly)
-
 """
 
 scan_funcs = {}
