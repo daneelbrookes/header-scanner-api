@@ -30,22 +30,29 @@ def strict_transport_security(val: str) -> Tuple[int, str]:
 
     # No header exists
     if val is None:
-        return (-20, "")
+        return (-20, "Header not implemented")
     
-    if 'max-age' not in val:
-        # Invalid header
-        return (-20, "")
+    list_val = val.split(";")
+    age = None
     
-    try:
-        age = int(val.split('=')[1])
-    except ValueError:
-        # Invalid header
-        return (-20, "")
+    for val in list_val:
+        if 'max-age' in val:
+            try:
+                age = int(val.split('=')[1])
+            except ValueError:
+                # Invalid header
+                return (-20, "Header not recognized")
+                    
+    if age is None:
+        return (-20, "Header not recognized")
     
     if age < 15768000:
-        return (-10, "")
+        return (-10, "Header set to less than six months")
     
-    return (0, "")
+    if 'preload' in list_val:
+        return (5, "Header is preloaded")
+    
+    return (0, "Header set to a minimum of six months")
 
 @scan_header("x-content-type-options")
 def x_content_type_options(val: str) -> Tuple[int, str]:
@@ -67,11 +74,6 @@ def set_cookie(val: str) -> Tuple[int, str]:
     cookies = val.split(";")
 
     #if 'Secure' in cookies:
-
-    return (0, "")
-
-@scan_header("x-content-policy")
-def x_content_policy(val: str) -> Tuple[int, str]:
 
     return (0, "")
 
