@@ -1,4 +1,5 @@
 from flask import Blueprint, jsonify, request
+from scan import _scan
 
 api = Blueprint("api", __name__)
 
@@ -16,9 +17,14 @@ def scan():
 
     url = data.get('url') if data else None
     if url is None:
-        return jsonify({"msg": "A URL must be supplied."})
+        return jsonify(
+            {
+                "status": "SUCCESSFUL",
+                "err_msg": "",
+                "scan": {}
+            }
+        )
     
+    resp = _scan(url)
     
-
-
-    return jsonify({"msg": "Yo"})
+    return jsonify(resp)

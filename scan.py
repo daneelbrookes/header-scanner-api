@@ -4,7 +4,7 @@ from typing import Dict, Any
 
 url = 'https://vulnapi.cerberauth.com/docs/best-practices/security-headers'
 
-def scan(url: str) -> Dict[str, Any]:
+def _scan(url: str) -> Dict[str, Any]:
 
     """
     
@@ -23,7 +23,6 @@ def scan(url: str) -> Dict[str, Any]:
     rating = 0
     header_tuples = {}
     
-
     try:
         head = requests.head(url).headers
     except requests.ConnectionError:
@@ -52,6 +51,3 @@ def scan(url: str) -> Dict[str, Any]:
             "headers": header_tuples
         }
     }
-
-rating = scan(url)
-print(rating)
