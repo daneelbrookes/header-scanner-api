@@ -1,20 +1,8 @@
+# 
+# https://developer.mozilla.org/en-US/observatory/docs/tests_and_scoring
+
+
 from typing import Tuple
-
-"""
-
-Good Headers:
-
-https://vulnapi.cerberauth.com/docs/best-practices/security-headers
-https://developer.mozilla.org/en-US/observatory/analyze?host=youtube.com#scoring
-
-Strict-Transport-Security
-Cross-Origin-Opener-Policy
-Content-Security-Policy
-X-Frame-Options
-X-Content-Type-Options
-X-XSS-Protection
-Set-Cookie (Secure, HttpOnly)
-"""
 
 scan_funcs = {}
 
@@ -57,18 +45,18 @@ def strict_transport_security(val: str) -> Tuple[int, str]:
 def x_content_type_options(val: str) -> Tuple[int, str]:
 
     if val is None:
-        return (-5, "")
+        return (-5, "X-Content-Type-Options header not implemented")
 
     if val.lower() == 'nosniff':
-        return (0, "")
+        return (0, "X-Content-Type-Options header set to nosniff")
     
-    return (-5, "")
+    return (-5, "X-Content-Type-Options header cannot be recognized")
 
 @scan_header("set-cookie")
 def set_cookie(val: str) -> Tuple[int, str]:
 
     if val is None:
-        return (0, "")
+        return (0, "No cookies detected")
 
     cookies = val.split(";")
 
@@ -80,7 +68,7 @@ def set_cookie(val: str) -> Tuple[int, str]:
 def referrer_policy(val: str) -> Tuple[int, str]:
 
     if val is None:
-        return (0, "")
+        return (0, "Referrer-Policy header not implemented")
 
     if val in [
         "no-referrer",
@@ -88,7 +76,7 @@ def referrer_policy(val: str) -> Tuple[int, str]:
         "strict-origin",
         "strict-origin-when-cross-origin"
     ]:
-        return (5, "")
+        return (5, "Referrer-Policy header set to no-referrer, same-origin, strict-origin or strict-origin-when-cross-origin")
     
     elif val in [
         "origin",
@@ -96,7 +84,36 @@ def referrer_policy(val: str) -> Tuple[int, str]:
         "unsafe-url",
         "no-referrer-when-downgrade"
     ]:
-        return (-5, "")
+        return (-5, "Referrer-Policy header set unsafely to origin, origin-when-cross-origin, unsafe-url or no-referrer-when-downgrade")
     
-    return (-5, "")
+    return (-5, "Referrer-Policy header cannot be recognized")
+
+@scan_header('accept-control-allow-origin')
+def accept_control_allow_origin(val: str) -> Tuple[int, str]:
     
+    return (0, "")
+
+@scan_header('x-frame-options')
+def x_frame_options(val: str) -> Tuple[int, str]:
+
+    if val is None:
+        return (-20, "X-Frame-Options (XFO) header not implemented")
+    
+    if val in ['SAMEORIGIN', 'DENY']:
+        return (0, "X-Frame-Options (XFO) header set to SAMEORIGIN or DENY")
+    
+
+    return (-20, "X-Frame-Options (XFO) header cannot be recognized")
+
+
+
+
+
+# to-do, this is complicated x)
+
+# @scan_header("content-security-policy")
+# def content_security_policy(val: str) -> Tuple[int, str]:
+
+#     if val is None:
+#         return (-25, "Content Security Policy (CSP) header not implemented")
+

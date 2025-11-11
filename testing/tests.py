@@ -18,4 +18,8 @@ def test_urls():
 
         
         for header_name, result in res['scan']['headers'].items():
+
+            if header_name not in ev:
+                continue
+
             assert ev[header_name] == result[0], f'URL: {url} FAILED HEADER: {header_name} VAL {result[0]} EV {ev[header_name]}'

@@ -4,7 +4,9 @@
         "strict-transport-security": 0,
         "x-content-type-options": 0,
         "set-cookie": 0,
-        "referrer-policy": 0
+        "referrer-policy": 0,
+        "x-frame-options": 0
+        
     },
 
     "https://developer.mozilla.org/":
@@ -12,6 +14,7 @@
         "strict-transport-security": 0,
         "x-content-type-options": 0,
         "set-cookie": 0,
-        "referrer-policy": 5
+        "referrer-policy": 5,
+        "x-frame-options": 0
     }
 }
